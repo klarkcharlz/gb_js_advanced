@@ -5,6 +5,7 @@ const goods = [
   { title: "Shoes", price: 250 },
 ];
 
+/*
 function renderGoodsList(list = { title: "Empty", price: 0 }) {
   let goodsList = document.querySelector(".goods-list");
   list.forEach(({ title, price }) => {
@@ -19,5 +20,17 @@ function renderGoodsList(list = { title: "Empty", price: 0 }) {
     goodsList.appendChild(div);
   });
 }
+
+renderGoodsList(goods);
+*/
+
+const renderGoodsItem = ({ title, price }) => {
+  return `<div class="goods-item"><h3>${title}</h3><p>${price}</p></div>`;
+};
+
+const renderGoodsList = (list) => {
+  let goodsList = list.map((item) => renderGoodsItem(item));
+  document.querySelector(".goods-list").innerHTML = goodsList.join(" ");
+};
 
 renderGoodsList(goods);
