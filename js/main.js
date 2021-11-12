@@ -1,68 +1,46 @@
-const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+function validationFormData() {
+    let invalidInput = [];
 
-class ProductsList {
-    constructor(container = '.products') {
-        this.container = container;
-        this.goods = [];//массив товаров из JSON документа
-        this.basket = [];
-        this._getProducts()
-            .then(data => { //data - объект js
-                this.goods = data;
-                this.render()
-            });
-
-        this._getBasket()
-            .then(data => {
-                this.basket = data.contents;
-                console.log(this.basket);
-            });
+    const regexp = {
+        'name': /^[a-zа-я]+$/i,
+        'mobile': /^\+7[(]\d{3}[)]\d{3}-\d{4}$/,
+        'email': /^my[.|-]?mail@mail.ru$/
     }
 
-    _getProducts() {
-        return fetch(`${API}/catalogData.json`)
-            .then(result => result.json())
-            .catch(error => {
-                console.log(error);
-            });
+    let validationInputs = document.querySelectorAll("[data-regexp='regexp']");
+    for (const input of validationInputs) {
+        const nameRegexp = regexp[input.id];
+        if (!nameRegexp.test(input.value)) {
+            invalidInput.push(input.dataset.name);
+            input.classList.add("invalid");
+        } else input.classList.remove("invalid");
     }
 
-    _getBasket() {
-        return fetch(`${API}/getBasket.json`)
-            .then(result => result.json())
-            .catch(error => {
-                console.log(error);
-            });
+    if (invalidInput) {
+        let res = document.querySelector("#result");
+        res.value = `Следующие поля не прошли валидацию:\n${invalidInput.join("\n")}`;
     }
 
-    render() {
-        const block = document.querySelector(this.container);
-        for (let product of this.goods) {
-            const productObj = new ProductItem(product);
-            block.insertAdjacentHTML('beforeend', productObj.render());
-        }
-    }
 }
 
+// Задание 1-2
 
-class ProductItem {
-    constructor(product, img = 'https://via.placeholder.com/200x150') {
-        this.title = product.product_name;
-        this.price = product.price;
-        this.id = product.id_product;
-        this.img = img;
-    }
+let textForReplace = "One: 'Hi Mary.' Two: 'Oh, hi.'\n" +
+    "One: 'How are you doing?'\n" +
+    "Two: 'I'm doing alright. How about you?'\n" +
+    "    One: 'Not too bad. The weather is great isn't it?'\n" +
+    "    Two: 'Yes. It's absolutely beautiful today.'\n" +
+    "One: 'I wish it was like this more frequently.'\n" +
+    "Two: 'Me too.'\n" +
+    "One: 'So where are you going now?'\n" +
+    "Two: 'I'm going to meet a friend of mine at the department store.'\n" +
+    "One: 'Going to do a little shopping?'\n" +
+    "Two: 'Yeah, I have to buy some presents for my parents.'\n" +
+    "One: 'What's the occasion?'\n" +
+    "Two: 'It's their anniversary.'\n" +
+    "One: 'That's great. Well, you better get going. You don't want to be late.'\n" +
+    "Two: 'I'll see you next time.'\n" +
+    "One: 'Sure. Bye.'";
 
-    render() {
-        return `<div class="product-item" data-id="${this.id}">
-                <img src="${this.img}" alt="Some img">
-                <div class="desc">
-                    <h3>${this.title}</h3>
-                    <p>${this.price} $</p>
-                    <button class="buy-btn">Купить</button>
-                </div>
-            </div>`
-    }
-}
-
-let list = new ProductsList();
+console.log(textForReplace.replace(/\B'/g,'"'));
 

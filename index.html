@@ -1,27 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Интернет-магазин</title>
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/style.css">
-</head> 
+    <title>Регулярные выражений</title>
+    <link rel="stylesheet" href="style/style.css">
+</head>
 <body>
-    <header>
-        <div class="logo">E-shop</div>
-        <button class="btn-cart" type="button">Корзина</button>
-    </header>
-    <main>
-        <div class="products"></div>
-    </main>
+<div>
+    <form action="">
+        <label for="name">Имя</label>
+        <input id="name" type="text" data-name="Имя" data-regexp="regexp"> <br>
 
-    <!--beforestart-->
-    <!--<p>-->
-        <!--afterstart-->
-        <!--<span></span>-->
-        <!--beforeend-->
-    <!--</p> -->
-    <!--afterend-->
-    <script src="js/main.js"></script>
+        <label for="mobile">Номер телефона</label>
+        <input id="mobile" type="text" data-name="Номер телефона" data-regexp="regexp"> <br>
+
+        <label for="email">email</label>
+        <input id="email" type="text" data-name="Эллектронная почта" data-regexp="regexp"> <br>
+
+        <button type="button" onclick="validationFormData()">Отправить</button>
+
+    </form>
+
+    <div>
+        <textarea name="" id="result" cols="60" rows="20"></textarea>
+    </div>
+</div>
+
+<script src="js/main.js"></script>
 </body>
 </html>
