@@ -1,46 +1,55 @@
-function validationFormData() {
-    let invalidInput = [];
+const API =
+  "https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses";
 
-    const regexp = {
-        'name': /^[a-zа-я]+$/i,
-        'mobile': /^\+7[(]\d{3}[)]\d{3}-\d{4}$/,
-        'email': /^my[.|-]?mail@mail.ru$/
-    }
-
-    let validationInputs = document.querySelectorAll("[data-regexp='regexp']");
-    for (const input of validationInputs) {
-        const nameRegexp = regexp[input.id];
-        if (!nameRegexp.test(input.value)) {
-            invalidInput.push(input.dataset.name);
-            input.classList.add("invalid");
-        } else input.classList.remove("invalid");
-    }
-
-    if (invalidInput) {
-        let res = document.querySelector("#result");
-        res.value = `Следующие поля не прошли валидацию:\n${invalidInput.join("\n")}`;
-    }
-
-}
-
-// Задание 1-2
-
-let textForReplace = "One: 'Hi Mary.' Two: 'Oh, hi.'\n" +
-    "One: 'How are you doing?'\n" +
-    "Two: 'I'm doing alright. How about you?'\n" +
-    "    One: 'Not too bad. The weather is great isn't it?'\n" +
-    "    Two: 'Yes. It's absolutely beautiful today.'\n" +
-    "One: 'I wish it was like this more frequently.'\n" +
-    "Two: 'Me too.'\n" +
-    "One: 'So where are you going now?'\n" +
-    "Two: 'I'm going to meet a friend of mine at the department store.'\n" +
-    "One: 'Going to do a little shopping?'\n" +
-    "Two: 'Yeah, I have to buy some presents for my parents.'\n" +
-    "One: 'What's the occasion?'\n" +
-    "Two: 'It's their anniversary.'\n" +
-    "One: 'That's great. Well, you better get going. You don't want to be late.'\n" +
-    "Two: 'I'll see you next time.'\n" +
-    "One: 'Sure. Bye.'";
-
-console.log(textForReplace.replace(/\B'/g,'"'));
-
+const app = new Vue({
+  el: "#app",
+  data: {
+    catalogUrl: "/catalogData.json",
+    products: [],
+    filtered: [],
+    imgCatalog: "https://via.placeholder.com/200x150",
+    userSearch: "",
+    show: false,
+  },
+  methods: {
+    filter(event) {
+      value = event.target[0].value;
+      const regexp = new RegExp(value, "i");
+      this.filtered = this.products.filter((product) =>
+        regexp.test(product.product_name)
+      );
+      this.products.forEach((el) => {
+        const block = document.querySelector(
+          `.product-item[data-id="${el.id_product}"]`
+        );
+        if (!this.filtered.includes(el)) {
+          block.classList.add("invisible");
+        } else {
+          block.classList.remove("invisible");
+        }
+      });
+    },
+    getJson(url) {
+      return fetch(url)
+        .then((result) => result.json())
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    addProduct(product) {
+      console.log(product.id_product);
+    },
+  },
+  mounted() {
+    this.getJson(`${API + this.catalogUrl}`).then((data) => {
+      for (let el of data) {
+        this.products.push(el);
+      }
+    });
+    this.getJson(`getProducts.json`).then((data) => {
+      for (let el of data) {
+        this.products.push(el);
+      }
+    });
+  },
+});
